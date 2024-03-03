@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap");
+        </style>
+        <link rel="stylesheet" href="./dist/style.css" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+            integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <title>Les petits Plats</title>
+    </head>
+    <body class="mx-60">
+        <header class="relative text-center">
+            <img src="./Photos/fond/fond.jpg" alt="" />
+            <img class="absolute top-14 left-14 w-1/5" src="./Photos/fond/logo.png" alt="" />
+
+            <div class="absolute w-full top-1/3 flex justify-center items-center flex-col">
+                <h1 class="text-amber-300 text-5xl flex justify-center leading-normal mb-9">
+                    CHERCHEZ PARMI PLUS DE 1500 RECETTES <br />
+                    DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES
+                </h1>
+                <div class="w-full relative">
+                    <input
+                        type="text"
+                        class="h-16 pl-9 w-9/12 rounded-xl"
+                        placeholder="Recherchez une recette, un ingrédient, ..."
+                    />
+                    <button class="relative bg-black rounded-xl -left-24">
+                        <i class="fa-solid fa-magnifying-glass fa-2xl p-6 cursor-pointer" style="color: #ffffff"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <template></template>
+
+        <script src="./scripts/index.js"></script>
+    </body>
+</html>
