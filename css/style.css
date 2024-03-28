@@ -15,3 +15,7 @@
         font-family: "Anton", system-ui, sans-serif;
     }
 }
+
+.button {
+    @apply relative bg-black rounded-xl -left-24 duration-700 hover:bg-amber-300 hover:ease-in-out;
+}

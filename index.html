@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="./dist/style.css" />
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -15,9 +14,8 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         />
-        <title>Les petits Plats</title>
     </head>
-    <body class="mx-60">
+    <body class="mx-10">
         <header class="relative text-center">
             <img src="./Photos/fond/fond.jpg" alt="" />
             <img class="absolute top-14 left-14 w-1/5" src="./Photos/fond/logo.png" alt="" />
@@ -33,14 +31,107 @@
                         class="h-16 pl-9 w-9/12 rounded-xl"
                         placeholder="Recherchez une recette, un ingrédient, ..."
                     />
-                    <button class="relative bg-black rounded-xl -left-24">
-                        <i class="fa-solid fa-magnifying-glass fa-2xl p-6 cursor-pointer" style="color: #ffffff"></i>
+                    <button class="button" title="ceci est un bouton">
+                        <i
+                            class="fa-solid fa-magnifying-glass fa-2xl p-6 cursor-pointer text-white hover:text-black duration-1000 hover:ease-in-out"
+                        ></i>
                     </button>
                 </div>
             </div>
         </header>
-        <template></template>
 
-        <script src="./scripts/index.js"></script>
+        <main class="bg-grey">
+            <!-------------------------------------- SECTION RECHERCHE ------------------------------------------->
+
+            <section class="searchButtonContainer h-52 relative top-8 left-14 flex gap-x-12 max-h-52">
+                <!-------------------------- Recherche Ingrédients -------------------------->
+
+                <div id="SearchInDropdownMenu" class="max-h-14">
+                    <div
+                        id="dropdownButton"
+                        class="bg-white p-4 rounded-xl w-48 flex items-center justify-between cursor-pointer top-3 left-3"
+                    >
+                        Ingrédients<i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <div id="DropDownIngredient" class="w-48 hidden cursor-pointer">
+                    <div class="bg-white p-4 flex items-center justify-between rounded-t-xl">
+                        Ingrédients<i class="fa-solid fa-chevron-up"></i>
+                    </div>
+
+                    <div class="relative px-3 pb-3 bg-white flex justify-end items-center">
+                        <input
+                            id="searchIngredient"
+                            type="text"
+                            class="p-1 w-full outline-none border-gray-300 border rounded-sm h-8"
+                        />
+                        <i class="absolute fa-solid fa-magnifying-glass text-gray-300 right-6"></i>
+                    </div>
+                    <div class="bg-white rounded-b-xl">
+                        <ul id="listIngredients" class="h-52 overflow-auto"></ul>
+                    </div>
+                </div>
+
+                <!-------------------------- Recherche Appareils -------------------------->
+
+                <div id="SearchInDropdownMenuAppliance" class="max-h-14">
+                    <div id="dropdownButton" class="bg-white p-4 rounded-xl w-48 flex items-center justify-between">
+                        Appareils<i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <div id="DropDownAppliance" class="w-48 hidden">
+                    <div class="bg-white p-4 flex items-center justify-between rounded-t-xl">
+                        Appareils<i class="fa-solid fa-chevron-up"></i>
+                    </div>
+
+                    <div class="relative px-3 pb-3 bg-white flex justify-end items-center">
+                        <input
+                            id="searchAppliance"
+                            type="text"
+                            class="p-1 w-full outline-none border-gray-300 border rounded-sm h-8"
+                        />
+                        <i class="absolute fa-solid fa-magnifying-glass text-gray-300 right-6"></i>
+                    </div>
+                    <div class="bg-white rounded-b-xl">
+                        <ul id="listAppliance" class="h-52 overflow-auto"></ul>
+                    </div>
+                </div>
+
+                <!-------------------------- Recherche Ustensiles -------------------------->
+
+                <div id="SearchInDropdownMenuUstensils">
+                    <div id="dropdownButton" class="bg-white p-4 rounded-xl w-48 flex items-center justify-between">
+                        Ustensiles<i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <div id="DropDownUstensils" class="w-48 hidden">
+                    <div class="bg-white p-4 flex items-center justify-between rounded-t-xl">
+                        Ustensiles<i class="fa-solid fa-chevron-up"></i>
+                    </div>
+
+                    <div class="relative px-3 pb-3 bg-white flex justify-end items-center">
+                        <input
+                            id="searchUstensil"
+                            type="text"
+                            class="p-1 w-full outline-none border-gray-300 border rounded-sm h-8"
+                        />
+                        <i class="absolute fa-solid fa-magnifying-glass text-gray-300 right-6"></i>
+                    </div>
+                    <div class="bg-white rounded-b-xl">
+                        <ul id="listUstensils" class="h-52 overflow-auto"></ul>
+                    </div>
+                </div>
+                <div id="totalRecipe"></div>
+            </section>
+
+            <!-------------------------- SECTION CARTES -------------------------->
+
+            <section id="recipes" class="flex flex-wrap gap-12 justify-evenly"></section>
+        </main>
+
+        <script type="module" src="./scripts/index.js"></script>
     </body>
 </html>
