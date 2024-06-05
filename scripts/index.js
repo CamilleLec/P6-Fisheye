@@ -15,12 +15,18 @@ recipes.forEach(function (recipe) {
     applianceSet.add(recipe.appliance);
 });
 
-ingredientsSet.forEach(function (ingredient) {
+function createListIngredient(ingredient) {
     const li = document.createElement("li");
     li.textContent = ingredient;
     li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4", "listOfIngredients");
+    return li;
+}
 
+ingredientsSet.forEach(function (ingredient) {
+    const li = createListIngredient(ingredient);
+    document.getElementById("listIngredients").appendChild(li);
     li.addEventListener("click", () => {
+        orderByIngredients(ingredient);
         const newSpan = document.createElement("span");
         newSpan.classList.add(
             "bg-amber-300",
@@ -40,6 +46,7 @@ ingredientsSet.forEach(function (ingredient) {
 
         close.addEventListener("click", () => {
             newSpan.classList.add("hidden");
+            resetCards();
         });
 
         newSpan.addEventListener("click", (e) => {
@@ -54,7 +61,6 @@ ingredientsSet.forEach(function (ingredient) {
             SearchInDropdownMenu.appendChild(newSpan);
         }
     });
-    listIngredients.appendChild(li);
 });
 
 applianceSet.forEach(function (appliance) {
@@ -62,6 +68,7 @@ applianceSet.forEach(function (appliance) {
     li.textContent = appliance;
     li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4");
     li.addEventListener("click", () => {
+        orderByAppliance(appliance);
         const newSpan = document.createElement("span");
         newSpan.classList.add(
             "bg-amber-300",
@@ -81,6 +88,7 @@ applianceSet.forEach(function (appliance) {
 
         close.addEventListener("click", () => {
             newSpan.classList.add("hidden");
+            resetCards();
         });
 
         newSpan.addEventListener("click", (e) => {
@@ -103,6 +111,7 @@ ustensilsSet.forEach(function (ustensil) {
     li.textContent = ustensil;
     li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4");
     li.addEventListener("click", () => {
+        orderByUstensil(ustensil);
         const newSpan = document.createElement("span");
         newSpan.classList.add(
             "bg-amber-300",
@@ -122,6 +131,7 @@ ustensilsSet.forEach(function (ustensil) {
 
         close.addEventListener("click", () => {
             newSpan.classList.add("hidden");
+            resetCards();
         });
 
         newSpan.addEventListener("click", (e) => {
@@ -139,7 +149,7 @@ ustensilsSet.forEach(function (ustensil) {
     document.getElementById("listUstensils").appendChild(li);
 });
 
-// ------------------- Ouverture/Fermeture des champs de recherche
+// ------------------- OUVERTURE/FERMETURE DES CHAMPS DE RECHERCHE
 
 const SearchInDropdownMenu = document.getElementById("SearchInDropdownMenu");
 const DropDownIngredient = document.getElementById("DropDownIngredient");
@@ -207,20 +217,22 @@ searchUstensil.addEventListener("click", (e) => {
     e.stopPropagation();
 });
 
-// ---------------- Total recettes
+// ---------------- TOTAL RECETTES ----------------
 
 const totalRecipe = document.getElementById("totalRecipe");
 
-// ---------------- Création des cartes
+// ---------------- CREATION DES CARTES ----------------
+
+function createCards() {
 
 recipes.forEach(function (recipe) {
     const article = document.createElement("article");
-    article.classList.add("w-96", "h-730", "bg-white", "rounded-xl", "shadow-2xl");
+    article.classList.add("cards", "w-96", "h-730", "bg-white", "rounded-xl", "shadow-2xl");
     const picture = document.createElement("img");
     picture.src = "/Photos/" + recipe.image;
     picture.classList.add("rounded-t-xl", "h-64", "w-full", "object-cover");
     article.appendChild(picture);
-    document.getElementById("recipes").appendChild(article);
+    document.getElementById("recipesId").appendChild(article);
     const div = document.createElement("div");
     div.classList.add("textContent", "p-8");
     const h2 = document.createElement("h2");
@@ -266,12 +278,48 @@ recipes.forEach(function (recipe) {
     });
     article.appendChild(div);
 });
+}
 
-// ---------------------- Champ de Recherche
+createCards()
+
+// ---------------------- CHAMP DE RECHERCHE PRINCIPAL ----------------------
+
+const searchBar = document.getElementById("searchBar");
+const cards = document.querySelectorAll(".cards");
+
+searchBar.addEventListener("input", (e) => {
+    const inputWord = e.target.value.toLowerCase();
+    if (inputWord.length === 0) {
+        resetCards();
+    } else {
+        filterResult(inputWord, cards);
+    }
+});
+
+function filterResult(inputWord, cards) {
+    if (inputWord.length >= 3) {
+        for (let i = 0; i < cards.length; i++) {
+            if (
+                cards[i].textContent
+                    .toLowerCase()
+                    .replace("ç", "c")
+                    .replace("â", "a")
+                    .replace("ï", "i")
+                    .includes(inputWord)
+            ) {
+                cards[i].style.display = "block";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+}
+
+// ---------------------- FILTRE DU CHAMP INPUT DANS LES MENUS DEROULANTS ----------------------
 
 const ingredientArray = Array.from(ingredientsSet);
-
-function resultSearch() {}
+const applianceArray = Array.from(applianceSet);
+const ustensilsArray = Array.from(ustensilsSet);
 
 searchIngredient.addEventListener("input", () => {
     const valueIngredient = searchIngredient.value;
@@ -287,29 +335,62 @@ searchIngredient.addEventListener("input", () => {
             listIngredients.appendChild(li);
         });
     }
-    //     else if (valueIngredient.length >= 3 && result === 0 ){
-    //         listIngredients.innerHTML = "";
-    // }
 });
 
-// const searchIngredient = document.getElementById("searchIngredient");
-// const searchAppliance = document.getElementById("searchAppliance");
-// const searchUstensil = document.getElementById("searchUstensil");
+// ---------------------- FONCTIONS DE FILTRE POUR LES MENUS DEROULANT ----------------------
 
-// searchIngredient.addEventListener("input", () => {
-//     const valueIngredient = searchIngredient.value;
+function orderByIngredients(ingredient) {
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].textContent.toLowerCase().includes(ingredient.toLowerCase())) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
 
-//     const searchMatch = ingredientArray.some((ingredient) => ingredient.toLowerCase().includes(valueIngredient));
+function orderByAppliance(appliance) {
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].textContent.toLowerCase().includes(appliance.toLowerCase())) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
 
-//     if (valueIngredient.length >= 3 && searchMatch) {
-//         const listOfIngredients = document.querySelectorAll(".listOfIngredients");
-//         listOfIngredients.forEach(function (el) {
-//             el.remove();
+function orderByUstensil(ustensil) {
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].textContent.toLowerCase().includes(ustensil.toLowerCase())) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
 
-//         });
+function search() {
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].textContent.toLowerCase().includes(items.toLowerCase())) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
 
-//         console.log(`yep`);
-//     } else {
-//         console.log("no");
-//     }
-// });
+function resetCards() {
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].style.display = "block";
+    }
+}
+
+// function qui accepte une recette et les ingredients choisi et retourne vrai ou faux si les ingredients sont dans la recette
+
+function hasIngredients(recipe, ingredients) {}
+
+// function qui accepte une recette et les appliance choisi et retourne vrai ou faux si les applicance sont dans la recette
+
+// function qui accepte une recette et les ustensils choisi et retourne vrai ou faux si les ustensils sont dans la recette
+
+// function qui accepte une recette et le input choisi et retourne vrai ou faux si le input est dans la recette

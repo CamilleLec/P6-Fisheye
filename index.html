@@ -27,11 +27,12 @@
                 </h1>
                 <div class="w-full relative">
                     <input
+                        id="searchBar"
                         type="text"
                         class="h-16 pl-9 w-9/12 rounded-xl"
                         placeholder="Recherchez une recette, un ingrédient, ..."
                     />
-                    <button class="button" title="ceci est un bouton">
+                    <button class="button" title="bouton">
                         <i
                             class="fa-solid fa-magnifying-glass fa-2xl p-6 cursor-pointer text-white hover:text-black duration-1000 hover:ease-in-out"
                         ></i>
@@ -101,7 +102,7 @@
 
                 <!-------------------------- Recherche Ustensiles -------------------------->
 
-                <div id="SearchInDropdownMenuUstensils">
+                <div id="SearchInDropdownMenuUstensils" class="max-h-14">
                     <div id="dropdownButton" class="bg-white p-4 rounded-xl w-48 flex items-center justify-between">
                         Ustensiles<i class="fa-solid fa-chevron-down"></i>
                     </div>
@@ -129,7 +130,7 @@
 
             <!-------------------------- SECTION CARTES -------------------------->
 
-            <section id="recipes" class="flex flex-wrap gap-12 justify-evenly"></section>
+            <section id="recipesId" class="flex flex-wrap gap-12 justify-evenly"></section>
         </main>
 
         <script type="module" src="./scripts/index.js"></script>
