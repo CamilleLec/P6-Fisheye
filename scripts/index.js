@@ -1,15 +1,17 @@
-import recipes from "/recipes.js";
+import allRecipes from "/recipes.js";
 
 let ingredientsSet = new Set();
+console.log(ingredientsSet);
 let applianceSet = new Set();
 let ustensilsSet = new Set();
 const listIngredients = document.getElementById("listIngredients");
+const tableResult = document.getElementById("recipesId");
 
-recipes.forEach(function (recipe) {
-    recipe.ingredients.forEach(function (ingredient) {
+allRecipes.forEach((recipe) => {
+    recipe.ingredients.forEach((ingredient) => {
         ingredientsSet.add(ingredient.ingredient);
     });
-    recipe.ustensils.forEach(function (ustensil) {
+    recipe.ustensils.forEach((ustensil) => {
         ustensilsSet.add(ustensil);
     });
     applianceSet.add(recipe.appliance);
@@ -22,9 +24,9 @@ function createListIngredient(ingredient) {
     return li;
 }
 
-ingredientsSet.forEach(function (ingredient) {
+ingredientsSet.forEach((ingredient) => {
     const li = createListIngredient(ingredient);
-    document.getElementById("listIngredients").appendChild(li);
+    listIngredients.appendChild(li);
     li.addEventListener("click", () => {
         orderByIngredients(ingredient);
         const newSpan = document.createElement("span");
@@ -63,7 +65,7 @@ ingredientsSet.forEach(function (ingredient) {
     });
 });
 
-applianceSet.forEach(function (appliance) {
+applianceSet.forEach((appliance) => {
     const li = document.createElement("li");
     li.textContent = appliance;
     li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4");
@@ -106,7 +108,7 @@ applianceSet.forEach(function (appliance) {
     document.getElementById("listAppliance").appendChild(li);
 });
 
-ustensilsSet.forEach(function (ustensil) {
+ustensilsSet.forEach((ustensil) => {
     const li = document.createElement("li");
     li.textContent = ustensil;
     li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4");
@@ -223,64 +225,63 @@ const totalRecipe = document.getElementById("totalRecipe");
 
 // ---------------- CREATION DES CARTES ----------------
 
-function createCards() {
+createCards(allRecipes);
 
-recipes.forEach(function (recipe) {
-    const article = document.createElement("article");
-    article.classList.add("cards", "w-96", "h-730", "bg-white", "rounded-xl", "shadow-2xl");
-    const picture = document.createElement("img");
-    picture.src = "/Photos/" + recipe.image;
-    picture.classList.add("rounded-t-xl", "h-64", "w-full", "object-cover");
-    article.appendChild(picture);
-    document.getElementById("recipesId").appendChild(article);
-    const div = document.createElement("div");
-    div.classList.add("textContent", "p-8");
-    const h2 = document.createElement("h2");
-    h2.textContent = recipe.name;
-    h2.classList.add("text-lg");
-    const span = document.createElement("span");
-    span.textContent = `RECETTE`;
-    span.classList.add("text-xs", "font-bold", "text-zinc-500", "pt-6", "pb-3", "block");
-    const p = document.createElement("p");
-    p.textContent = recipe.description;
-    p.classList.add("h-20", "truncate", "text-wrap", "text-sm");
-    const span2 = document.createElement("span");
-    span2.textContent = `INGREDIENTS`;
-    span2.classList.add("text-xs", "font-bold", "text-zinc-500", "block", "pt-8", "pb-4");
-    const section = document.createElement("section");
-    section.classList.add("grid", "grid-cols-2", "gap-3.5");
-
-    div.appendChild(h2);
-    div.appendChild(span);
-    div.appendChild(p);
-    div.appendChild(span2);
-    div.appendChild(section);
-
-    recipe.ingredients.forEach(function (ingredient) {
+function createCards(recipes) {
+    recipes.forEach((recipe) => {
+        const article = document.createElement("article");
+        article.classList.add("cards", "w-96", "h-730", "bg-white", "rounded-xl", "shadow-2xl");
+        const picture = document.createElement("img");
+        picture.src = "/Photos/" + recipe.image;
+        picture.classList.add("rounded-t-xl", "h-64", "w-full", "object-cover");
+        const div = document.createElement("div");
+        div.classList.add("textContent", "p-8");
+        const h2 = document.createElement("h2");
+        h2.textContent = recipe.name;
+        h2.classList.add("text-lg");
+        const span = document.createElement("span");
+        span.textContent = `RECETTE`;
+        span.classList.add("text-xs", "font-bold", "text-zinc-500", "pt-6", "pb-3", "block");
         const p = document.createElement("p");
-        if (ingredient.quantity === undefined && ingredient.unit === undefined) {
-            p.textContent = ingredient.ingredient;
-        } else if (ingredient.unit === undefined) {
-            p.innerHTML =
-                ingredient.ingredient + "<br>" + `<span class="text-zinc-500">` + ingredient.quantity + "</span>";
-        } else if (ingredient.quantity != undefined && ingredient.unit != undefined) {
-            p.innerHTML =
-                ingredient.ingredient +
-                "<br>" +
-                `<span class="text-zinc-500">` +
-                ingredient.quantity +
-                " " +
-                ingredient.unit +
-                "</span>";
-        }
-        p.classList.add("text-sm", "font-medium");
-        section.appendChild(p);
-    });
-    article.appendChild(div);
-});
-}
+        p.textContent = recipe.description;
+        p.classList.add("h-20", "truncate", "text-wrap", "text-sm");
+        const span2 = document.createElement("span");
+        span2.textContent = `INGREDIENTS`;
+        span2.classList.add("text-xs", "font-bold", "text-zinc-500", "block", "pt-8", "pb-4");
+        const section = document.createElement("section");
+        section.classList.add("grid", "grid-cols-2", "gap-3.5");
 
-createCards()
+        article.appendChild(picture);
+        tableResult.appendChild(article);
+        div.appendChild(h2);
+        div.appendChild(span);
+        div.appendChild(p);
+        div.appendChild(span2);
+        div.appendChild(section);
+
+        recipe.ingredients.forEach((ingredient) => {
+            const p = document.createElement("p");
+            if (ingredient.quantity === undefined && ingredient.unit === undefined) {
+                p.textContent = ingredient.ingredient;
+            } else if (ingredient.unit === undefined) {
+                p.innerHTML =
+                    ingredient.ingredient + "<br>" + `<span class="text-zinc-500">` + ingredient.quantity + "</span>";
+            } else if (ingredient.quantity != undefined && ingredient.unit != undefined) {
+                p.innerHTML =
+                    ingredient.ingredient +
+                    "<br>" +
+                    `<span class="text-zinc-500">` +
+                    ingredient.quantity +
+                    " " +
+                    ingredient.unit +
+                    "</span>";
+            }
+            p.classList.add("text-sm", "font-medium");
+            section.appendChild(p);
+        });
+        article.appendChild(div);
+    });
+}
 
 // ---------------------- CHAMP DE RECHERCHE PRINCIPAL ----------------------
 
@@ -288,30 +289,39 @@ const searchBar = document.getElementById("searchBar");
 const cards = document.querySelectorAll(".cards");
 
 searchBar.addEventListener("input", (e) => {
-    const inputWord = e.target.value.toLowerCase();
-    if (inputWord.length === 0) {
-        resetCards();
-    } else {
-        filterResult(inputWord, cards);
-    }
+    filterData(e);
 });
 
-function filterResult(inputWord, cards) {
-    if (inputWord.length >= 3) {
-        for (let i = 0; i < cards.length; i++) {
-            if (
-                cards[i].textContent
+function filterData(e) {
+    if (e.target.value.length >= 3) {
+        tableResult.innerHTML = "";
+        const inputWord = e.target.value.toLowerCase();
+
+        const filteredArr = allRecipes.filter((el) => {
+            const filteredIngredient = el.ingredients.some((el) =>
+                el.ingredient
                     .toLowerCase()
-                    .replace("ç", "c")
-                    .replace("â", "a")
-                    .replace("ï", "i")
+                    .normalize("NFD")
+                    .replace(/\p{Diacritic}/gu, "")
                     .includes(inputWord)
-            ) {
-                cards[i].style.display = "block";
-            } else {
-                cards[i].style.display = "none";
-            }
-        }
+            );
+            const filteredAppliance = el.appliance
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/\p{Diacritic}/gu, "")
+                .includes(inputWord);
+            const filteredUstensils = el.ustensils.some((el) =>
+                el
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/\p{Diacritic}/gu, "")
+                    .includes(inputWord)
+            );
+            return filteredIngredient || filteredAppliance || filteredUstensils;
+        });
+        createCards(filteredArr);
+    } else if (e.target.value.length === 0) {
+        createCards(allRecipes);
     }
 }
 
@@ -328,7 +338,7 @@ searchIngredient.addEventListener("input", () => {
     );
     if (valueIngredient.length >= 3 && result != 0) {
         listIngredients.innerHTML = "";
-        result.forEach(function (ingredient) {
+        result.forEach((ingredient) => {
             const li = document.createElement("li");
             li.textContent = ingredient;
             li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4", "listOfIngredients");
