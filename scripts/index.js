@@ -1,21 +1,37 @@
 import allRecipes from "/recipes.js";
 
-let ingredientsSet = new Set();
-console.log(ingredientsSet);
-let applianceSet = new Set();
-let ustensilsSet = new Set();
-const listIngredients = document.getElementById("listIngredients");
-const tableResult = document.getElementById("recipesId");
+let arrayIngredient = [];
+let arrayAppliance = [];
+let arrayUstensils = [];
 
 allRecipes.forEach((recipe) => {
     recipe.ingredients.forEach((ingredient) => {
-        ingredientsSet.add(ingredient.ingredient);
+        arrayIngredient.push(ingredient.ingredient);
     });
     recipe.ustensils.forEach((ustensil) => {
-        ustensilsSet.add(ustensil);
+        arrayUstensils.push(ustensil);
     });
-    applianceSet.add(recipe.appliance);
+    arrayAppliance.push(recipe.appliance);
 });
+
+arrayIngredient = [...new Set(arrayIngredient)]; // Suppression des doublons en utilisant Set
+arrayAppliance = [...new Set(arrayAppliance)];
+arrayUstensils = [...new Set(arrayUstensils)];
+
+arrayIngredient.sort(function (a, b) {
+    return a.localeCompare(b);
+}); //Tri par ordre alphabétique
+
+arrayAppliance.sort(function (a, b) {
+    return a.localeCompare(b);
+});
+
+arrayUstensils.sort(function (a, b) {
+    return a.localeCompare(b);
+});
+
+const listIngredients = document.getElementById("listIngredients");
+const tableResult = document.getElementById("recipesId");
 
 function createListIngredient(ingredient) {
     const li = document.createElement("li");
@@ -24,11 +40,11 @@ function createListIngredient(ingredient) {
     return li;
 }
 
-ingredientsSet.forEach((ingredient) => {
+arrayIngredient.forEach((ingredient) => {
     const li = createListIngredient(ingredient);
     listIngredients.appendChild(li);
     li.addEventListener("click", () => {
-        orderByIngredients(ingredient);
+        filteredIngredients(ingredient);
         const newSpan = document.createElement("span");
         newSpan.classList.add(
             "bg-amber-300",
@@ -53,7 +69,7 @@ ingredientsSet.forEach((ingredient) => {
 
         newSpan.addEventListener("click", (e) => {
             e.stopPropagation();
-        });
+        }); //Empeche l'ouverture du menu deroulant lors du clique
 
         const existingSpan = SearchInDropdownMenu.querySelector("span");
 
@@ -65,12 +81,12 @@ ingredientsSet.forEach((ingredient) => {
     });
 });
 
-applianceSet.forEach((appliance) => {
+arrayAppliance.forEach((appliance) => {
     const li = document.createElement("li");
     li.textContent = appliance;
     li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4");
     li.addEventListener("click", () => {
-        orderByAppliance(appliance);
+        filteredAppliance(appliance);
         const newSpan = document.createElement("span");
         newSpan.classList.add(
             "bg-amber-300",
@@ -108,12 +124,12 @@ applianceSet.forEach((appliance) => {
     document.getElementById("listAppliance").appendChild(li);
 });
 
-ustensilsSet.forEach((ustensil) => {
+arrayUstensils.forEach((ustensil) => {
     const li = document.createElement("li");
     li.textContent = ustensil;
     li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4");
     li.addEventListener("click", () => {
-        orderByUstensil(ustensil);
+        filteredUstensil(ustensil);
         const newSpan = document.createElement("span");
         newSpan.classList.add(
             "bg-amber-300",
@@ -283,6 +299,24 @@ function createCards(recipes) {
     });
 }
 
+// ---------------------- FILTRE DU CHAMP INPUT DANS LES MENUS DEROULANTS ----------------------
+
+searchIngredient.addEventListener("input", () => {
+    const valueIngredient = searchIngredient.value;
+    const result = arrayIngredient.filter((ingredient) =>
+        ingredient.toLowerCase().includes(valueIngredient.toLowerCase())
+    );
+    if (valueIngredient.length >= 3 && result != 0) {
+        listIngredients.innerHTML = "";
+        result.forEach((ingredient) => {
+            const li = document.createElement("li");
+            li.textContent = ingredient;
+            li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4", "listOfIngredients");
+            listIngredients.appendChild(li);
+        });
+    }
+});
+
 // ---------------------- CHAMP DE RECHERCHE PRINCIPAL ----------------------
 
 const searchBar = document.getElementById("searchBar");
@@ -325,31 +359,9 @@ function filterData(e) {
     }
 }
 
-// ---------------------- FILTRE DU CHAMP INPUT DANS LES MENUS DEROULANTS ----------------------
-
-const ingredientArray = Array.from(ingredientsSet);
-const applianceArray = Array.from(applianceSet);
-const ustensilsArray = Array.from(ustensilsSet);
-
-searchIngredient.addEventListener("input", () => {
-    const valueIngredient = searchIngredient.value;
-    const result = ingredientArray.filter((ingredient) =>
-        ingredient.toLowerCase().includes(valueIngredient.toLowerCase())
-    );
-    if (valueIngredient.length >= 3 && result != 0) {
-        listIngredients.innerHTML = "";
-        result.forEach((ingredient) => {
-            const li = document.createElement("li");
-            li.textContent = ingredient;
-            li.classList.add("py-1.5", "hover:bg-amber-300", "pl-4", "listOfIngredients");
-            listIngredients.appendChild(li);
-        });
-    }
-});
-
 // ---------------------- FONCTIONS DE FILTRE POUR LES MENUS DEROULANT ----------------------
 
-function orderByIngredients(ingredient) {
+function filteredIngredients(ingredient) {
     for (let i = 0; i < cards.length; i++) {
         if (cards[i].textContent.toLowerCase().includes(ingredient.toLowerCase())) {
             cards[i].style.display = "block";
@@ -359,7 +371,9 @@ function orderByIngredients(ingredient) {
     }
 }
 
-function orderByAppliance(appliance) {
+const filtre = igAp(ingredient, appliance)
+
+function filteredAppliance(appliance) {
     for (let i = 0; i < cards.length; i++) {
         if (cards[i].textContent.toLowerCase().includes(appliance.toLowerCase())) {
             cards[i].style.display = "block";
@@ -369,19 +383,9 @@ function orderByAppliance(appliance) {
     }
 }
 
-function orderByUstensil(ustensil) {
+function filteredUstensil(ustensil) {
     for (let i = 0; i < cards.length; i++) {
         if (cards[i].textContent.toLowerCase().includes(ustensil.toLowerCase())) {
-            cards[i].style.display = "block";
-        } else {
-            cards[i].style.display = "none";
-        }
-    }
-}
-
-function search() {
-    for (let i = 0; i < cards.length; i++) {
-        if (cards[i].textContent.toLowerCase().includes(items.toLowerCase())) {
             cards[i].style.display = "block";
         } else {
             cards[i].style.display = "none";
@@ -404,3 +408,5 @@ function hasIngredients(recipe, ingredients) {}
 // function qui accepte une recette et les ustensils choisi et retourne vrai ou faux si les ustensils sont dans la recette
 
 // function qui accepte une recette et le input choisi et retourne vrai ou faux si le input est dans la recette
+
+
